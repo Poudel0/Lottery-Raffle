@@ -11,11 +11,12 @@ pragma solidity ^0.8.8;
 
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
 error lottery__NotEnoughFee();
 error lottery_TransferFailed();
 
-contract lottery is VRFConsumerBaseV2 {
+contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
   // State Var
   uint256 private immutable i_entranceFee;
   address payable[] private s_players;
@@ -54,6 +55,9 @@ contract lottery is VRFConsumerBaseV2 {
     s_players.push(payable(msg.sender));
     emit lotteryenter(msg.sender);
   }
+
+  // checkup keep from chainlink
+  function checkUpkeep(bytes calldata /*checkData*/) external override {}
 
   function requestRandomWinner() external {
     //Request
