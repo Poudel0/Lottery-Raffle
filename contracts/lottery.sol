@@ -17,6 +17,11 @@ error lottery__NotEnoughFee();
 error lottery_TransferFailed();
 
 contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
+  enum lotteryState {
+    OPEN,
+    CALCULATING
+  }
+
   // State Var
   uint256 private immutable i_entranceFee;
   address payable[] private s_players;
@@ -29,6 +34,7 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
 
   //Lottery Variables
   address private s_recentWinner;
+  lotteryState private s_lotteryState;
 
   event lotteryenter(address indexed player);
   event RequestedLotteryWinner(uint256 indexed requestId);
@@ -46,6 +52,7 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
     i_keyHash = keyHash;
     i_subscriptionId = subscriptionId;
     i_callbackGasLimit = callbackGasLimit;
+    s_lotteryState = lotteryState.OPEN;
   }
 
   function enterlottery() public payable {
@@ -57,6 +64,11 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
   }
 
   // checkup keep from chainlink
+  /**
+   * @dev  Function that Chainlink Keeper node calls
+   * It shoule be treue inorder to return true
+   */
+
   function checkUpkeep(bytes calldata /*checkData*/) external override {}
 
   function requestRandomWinner() external {
