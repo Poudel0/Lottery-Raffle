@@ -33,6 +33,12 @@ module.exports = {
     },
   },
 
+  gasReporter: {
+    enabled: false,
+    currency: "USD",
+    outputFile: "gas-report.txt",
+  },
+
   namedAccounts: {
     deployer: {
       default: 0,

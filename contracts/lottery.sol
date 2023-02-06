@@ -51,7 +51,7 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
   uint256 private s_lastTimeStamp;
   uint256 private immutable i_interval;
 
-  event lotteryenter(address indexed player);
+  event LotteryEnter(address indexed player);
   event RequestedLotteryWinner(uint256 indexed requestId);
   event WinnerPicked(address indexed winner);
 
@@ -73,7 +73,7 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
     i_interval = interval;
   }
 
-  function enterlottery() public payable {
+  function enterLottery() public payable {
     if (msg.value < i_entranceFee) {
       revert lottery__NotEnoughFee();
     }
@@ -81,7 +81,7 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
       revert lottery_NotOpen();
     }
     s_players.push(payable(msg.sender));
-    emit lotteryenter(msg.sender);
+    emit LotteryEnter(msg.sender);
   }
 
   // checkup keep from chainlink
@@ -158,6 +158,10 @@ contract lottery is VRFConsumerBaseV2, KeeperCompatibleInterface {
 
   function getLotteryState() public view returns (lotteryState) {
     return s_lotteryState;
+  }
+
+  function getInterval() public view returns (uint256) {
+    return i_interval;
   }
 
   function getNumOfWords() public pure returns (uint256) {
