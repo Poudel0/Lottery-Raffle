@@ -34,15 +34,17 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
   const entranceFee = networkConfig[chainId]["entranceFee"];
   const gasLane = networkConfig[chainId]["gasLane"];
   const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"];
-  const interval = networkConfig[chainId]["interval"] || 30;
+  const interval = networkConfig[chainId]["interval"];
+
+  console.log(interval);
 
   const args = [
     vrfCoordinatorV2Address,
     subscriptionId,
     gasLane,
+    interval,
     entranceFee,
     callbackGasLimit,
-    interval,
   ];
   const lottery = await deploy("lottery", {
     from: deployer,

@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 const networkConfig = {
   default: {
     name: "hardhat",
-    interval: 30,
+    interval: "30",
   },
   5: {
     name: "goreli",
